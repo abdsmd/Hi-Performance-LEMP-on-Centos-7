@@ -1,4 +1,5 @@
 
+# LEMP Required Configure
 renice -n -20 -u redis
 renice -n -20 -u nginx
 renice -n -20 -u mysql
@@ -13,7 +14,10 @@ ulimit -v unlimited
 ulimit -x unlimited
 ulimit -s 8388608
 ulimit -l unlimited
+
 if test -f /sys/kernel/mm/transparent_hugepage/enabled; then
     echo never > /sys/kernel/mm/transparent_hugepage/enabled
 fi
+
+# Start Watchdog
 /watchdog.sh &
