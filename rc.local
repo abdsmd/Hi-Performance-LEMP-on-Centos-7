@@ -1,0 +1,19 @@
+
+renice -n -20 -u redis
+renice -n -20 -u nginx
+renice -n -20 -u mysql
+ulimit -c unlimited
+ulimit -d unlimited
+ulimit -f unlimited
+ulimit -i unlimited
+ulimit -n 999999
+ulimit -q unlimited
+ulimit -u unlimited
+ulimit -v unlimited
+ulimit -x unlimited
+ulimit -s 8388608
+ulimit -l unlimited
+if test -f /sys/kernel/mm/transparent_hugepage/enabled; then
+    echo never > /sys/kernel/mm/transparent_hugepage/enabled
+fi
+/watchdog.sh &
