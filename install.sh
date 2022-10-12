@@ -2,15 +2,14 @@
 # Install NGINX with PHP 7.4 and PHP-FPM
 # Hi Performance Web Server with Lets Encryt, with Cache, with Compress
 
-# Some Variable Set Here
-###########################################################################
-
-HNAME=HOST101
-
-
 # Get all input and execute one by one.
 ###########################################################################
 read -N 999999 -t 0.001
+
+# Some Variable Set Here
+###########################################################################
+read  -p "Enter Your FQDN Hostname : " HNAME
+read  -p "If you Need SWAP Enter Amount of GB (0 for none) : " SWAPGB
 
 # Set Hostname
 ###########################################################################
@@ -232,20 +231,19 @@ supervisorctl status all
 # Create SWAP Ram File, Here I am trying to Make 4GB of SWAP, 
 # If you want you can increase the size according to your need
 ###################################################################################
-
-dd if=/dev/zero of=/swapfile count=4096 bs=1MiB
-chmod 600 /swapfile
-mkswap /swapfile
-setenforce 0
-swapon -f /swapfile
-swapon -s
-free -m
-# Make the changes permanent, It will remain after restart the system
-echo "/swapfile     swap     swap     sw     0     0" >> /etc/fstab
-
-# Make some change to use SWAP when the system need it, make more for use this file more
-echo "50" > /proc/sys/vm/vfs_cache_pressure
-
+if [[ $SWAPGB > 0 ]]; then
+   dd if=/dev/zero of=/swapfile count=4096 bs=1MiB
+   chmod 600 /swapfile
+   mkswap /swapfile
+   setenforce 0
+   swapon -f /swapfile
+   swapon -s
+   free -m
+   # Make the changes permanent, It will remain after restart the system
+   echo "/swapfile     swap     swap     sw     0     0" >> /etc/fstab
+   # Make some change to use SWAP when the system need it, make more for use this file more
+   echo "50" > /proc/sys/vm/vfs_cache_pressure
+fi
 
 
 # Composer Install version Latest Version
