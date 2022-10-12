@@ -9,21 +9,55 @@ it can prevent any Ddos Attack or any attack.
 
 
 > php 7.4
+
+ 
 > nginx
+ 
 > mysql 5.7
+ 
 > lets encrypt
+
+
 > redis
+
+
 > memcached
+
+
 > supervisor
+
+
 > make swap if RAM is low
+
+
 > cron job
+
+
 > phantomjs
+
+
 > composer 2.0
+
+
 > iptables/ firewall
+
+
 > server time
+
+
 > system parameter for high performance
+
+
 > anti ddos
+
+
 > anti attack
+
+
 > system limit
+
+
 > ssh
+
+
 
