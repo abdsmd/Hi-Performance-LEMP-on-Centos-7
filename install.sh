@@ -45,9 +45,11 @@ service ntpdate restart
 
 # Set Name Server for the System
 ###########################################################################
-
-echo "nameserver 8.8.8.8" > /etc/resolv.conf
-echo "nameserver 1.1.1.1" >> /etc/resolv.conf
+# For Amazon CentOS 7
+mkdir -p /etc/NetworkManager/conf.d/
+echo -e  '[main]\ndns=none' > /etc/NetworkManager/conf.d/disable-resolve.conf-managing.conf
+echo -e "nameserver 9.9.9.9\nnameserver 1.1.1.1\nnameserver 8.8.8.8" > /etc/resolv.conf
+#---------------------------------------------------------------------------------------------
 
 # Disable Security
 ###########################################################################
