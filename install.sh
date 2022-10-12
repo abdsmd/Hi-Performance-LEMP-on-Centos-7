@@ -1,8 +1,6 @@
 #!/bin/sh
-
 # Install NGINX with PHP 7.4 and PHP-FPM
 # Hi Performance Web Server with Lets Encryt, with Cache, with Compress
-
 
 # Some Variable Set Here
 ###########################################################################
@@ -302,10 +300,6 @@ chgrp nginx /var/lib/php/session
 chmod 777 -R /var/lib/php/session
 chmod 777 -R /tmp
 
-
-
-
-
 chown nginx:nginx /usr/share/nginx/html/ -R
 
 #-------------------------------------------------------------------------------------
@@ -321,4 +315,7 @@ cd /path/to/your/laravel-directory
 chgrp -R nginx storage bootstrap/cache
 chmod -R ug+rwx storage bootstrap/cache
 #-------------------------------------------------------------------------------------
+
+# To install virtual host or multiple domain check my other tutorial,
+# How to install wordpress check my other tutorial
 
