@@ -2,6 +2,16 @@
 # Install NGINX with PHP 7.4 and PHP-FPM
 # Hi Performance Web Server with Lets Encryt, with Cache, with Compress
 
+# Set Name Server for the System
+###########################################################################
+# For Amazon CentOS 7
+echo "PEERDNS=no" >> /etc/sysconfig/network-scripts/ifcfg-$iname
+mkdir -p /etc/NetworkManager/conf.d/
+echo -e  '[main]\ndns=none' > /etc/NetworkManager/conf.d/disable-resolve.conf-managing.conf
+echo -e "nameserver 9.9.9.9\nnameserver 1.1.1.1\nnameserver 8.8.8.8" > /etc/resolv.conf
+#---------------------------------------------------------------------------------------------
+
+
 # Get all input and execute one by one.
 ###########################################################################
 read -N 999999 -t 0.001
@@ -51,14 +61,6 @@ chkconfig ntpdate on
 service ntpdate restart
 
 
-# Set Name Server for the System
-###########################################################################
-# For Amazon CentOS 7
-echo "PEERDNS=no" >> /etc/sysconfig/network-scripts/ifcfg-$iname
-mkdir -p /etc/NetworkManager/conf.d/
-echo -e  '[main]\ndns=none' > /etc/NetworkManager/conf.d/disable-resolve.conf-managing.conf
-echo -e "nameserver 9.9.9.9\nnameserver 1.1.1.1\nnameserver 8.8.8.8" > /etc/resolv.conf
-#---------------------------------------------------------------------------------------------
 
 # Disable Security
 ###########################################################################
