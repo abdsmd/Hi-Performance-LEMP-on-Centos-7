@@ -7,6 +7,12 @@
 read -N 999999 -t 0.001
 iname=$(ip addr show | awk '/inet.*brd/{print $NF; exit}')
 echo $iname
+yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+yum install -y http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+yum install -y yum-utils epel-release
+yum -y install centos-release-scl.noarch
+yum install -y yum-utils
+yum-config-manager --enable remi-php74
 
 # Some Variable Set Here
 ###########################################################################
@@ -125,12 +131,7 @@ yum update -y
 yum update -y
 yum install nginx -y
 
-yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-yum install -y http://rpms.remirepo.net/enterprise/remi-release-7.rpm
-yum install -y yum-utils epel-release
-yum -y install centos-release-scl.noarch
-yum install -y yum-utils
-yum-config-manager --enable remi-php74
+
 yum install -y php php-mysqlnd php-fpm php-opcache \
    php-pecl-apcu php-cli php-pear \
    php-pdo php-pgsql php-pecl-mongodb \
