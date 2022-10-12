@@ -5,6 +5,8 @@
 # Get all input and execute one by one.
 ###########################################################################
 read -N 999999 -t 0.001
+iname=$(ip addr show | awk '/inet.*brd/{print $NF; exit}')
+echo $iname
 
 # Some Variable Set Here
 ###########################################################################
@@ -46,6 +48,7 @@ service ntpdate restart
 # Set Name Server for the System
 ###########################################################################
 # For Amazon CentOS 7
+echo "PEERDNS=no" >> /etc/sysconfig/network-scripts/ifcfg-$iname
 mkdir -p /etc/NetworkManager/conf.d/
 echo -e  '[main]\ndns=none' > /etc/NetworkManager/conf.d/disable-resolve.conf-managing.conf
 echo -e "nameserver 9.9.9.9\nnameserver 1.1.1.1\nnameserver 8.8.8.8" > /etc/resolv.conf
@@ -88,8 +91,7 @@ sysctl -w net.ipv6.conf.all.disable_ipv6=1
 sysctl -w net.ipv6.conf.default.disable_ipv6=1
 
 # Get Interface name
-iname=$(ip addr show | awk '/inet.*brd/{print $NF; exit}')
-echo $iname
+
 
 # Flush All and Set New Rules
 iptables -F
