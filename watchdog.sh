@@ -1,5 +1,10 @@
 #!/bin/bash
-#ps -ef | grep -v grep | grep mysqld
+# Put this file in /watchdog.sh
+# chmod 777 /watchdog.sh
+# Check your system to see output of the command
+# ps -ef | grep -v grep | grep mysqld
+
+
 # Enable continue if any error
 set +e
 
