@@ -257,6 +257,13 @@ php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 rm -rf /usr/bin/composer
 ln -s /usr/local/bin/composer /usr/bin/composer
 
+
+# Configure SSHD
+######################################################################################
+wget -O /etc/ssh/sshd_config https://raw.githubusercontent.com/abdsmd/Hi-Performance-LEMP-on-Centos-7/main/sshd_config
+dos2unix /etc/ssh/sshd_config
+systemctl restart sshd
+
 ######################################################################################
 ######################################################################################
 # Make the enable after the system restart
@@ -279,6 +286,8 @@ dos2unix /etc/rc.local
 wget -O /watchdog.sh https://github.com/abdsmd/Hi-Performance-LEMP-on-Centos-7/raw/main/watchdog.sh
 dos2unix /watchdog.sh
 chmod 777 /watchdog.sh
+
+
 
 # Start and Enable on System Startup
 
