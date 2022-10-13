@@ -7,6 +7,11 @@ it can prevent any Ddos Attack or any attack.
 ```yum install -y wget && wget -O install.sh https://raw.githubusercontent.com/abdsmd/Hi-Performance-LEMP-on-Centos-7/main/install.sh && sh install.sh```
 
 
+Supervisor-Web
+
+![supervisor-web](supervisor-web.png "Supervisor Web Access")
+
+
 
 > php 7.4
 
