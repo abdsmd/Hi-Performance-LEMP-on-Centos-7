@@ -69,10 +69,7 @@ service ntpdate restart
 ###########################################################################
 
 setenforce 0
-cat <<EOF >/etc/sysconfig/selinux
-SELINUX=disable
-SELINUXTYPE=targeted
-EOF
+echo -e "SELINUX=disable\nSELINUXTYPE=targeted" > /etc/sysconfig/selinux
 
 
 # Disable All Kind of Firewall
@@ -80,6 +77,37 @@ EOF
 systemctl stop firewalld
 systemctl mask firewalld
 systemctl disable firewalld
+
+# Set IPTables Default
+###########################################################################
+
+# Flush All and Set New Rules
+iptables -F
+iptables -t nat -F
+iptables -I FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+iptables -I OUTPUT -o eth0 -d 10.0.0.0/8 -j DROP
+iptables -I OUTPUT -o eth0 -d 172.16.0.0/12 -j DROP
+iptables -I OUTPUT -o eth0 -d 192.168.0.0/16 -j DROP
+iptables -t nat -A POSTROUTING -o $iname -j MASQUERADE
+iptables-save > /etc/sysconfig/iptables
+
+
+# Install System Network Usage Tools
+vnstat --create -i $iname
+systemctl restart vnstat
+systemctl enable vnstat
+
+echo 1 > /proc/sys/net/ipv4/ip_forward
+echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6
+echo 1 > /proc/sys/net/ipv6/conf/default/disable_ipv6
+sysctl -w net.ipv6.conf.all.disable_ipv6=1
+sysctl -w net.ipv6.conf.default.disable_ipv6=1
+
+systemctl restart iptables
+systemctl enable iptables
+systemctl enable iptables.service
+
+
 
 
 # Set System Parameter
@@ -92,36 +120,6 @@ sysctl -p
 
 
 
-# Set IPTables Default
-###########################################################################
-
-echo 1 > /proc/sys/net/ipv4/ip_forward
-echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6
-echo 1 > /proc/sys/net/ipv6/conf/default/disable_ipv6
-sysctl -w net.ipv6.conf.all.disable_ipv6=1
-sysctl -w net.ipv6.conf.default.disable_ipv6=1
-
-# Get Interface name
-
-
-# Flush All and Set New Rules
-iptables -F
-iptables -t nat -F
-iptables -I FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
-iptables -I OUTPUT -o eth0 -d 10.0.0.0/8 -j DROP
-iptables -I OUTPUT -o eth0 -d 172.16.0.0/12 -j DROP
-iptables -I OUTPUT -o eth0 -d 192.168.0.0/16 -j DROP
-iptables -t nat -A POSTROUTING -o $iname -j MASQUERADE
-iptables-save > /etc/sysconfig/iptables
-
-systemctl restart iptables
-systemctl enable iptables
-systemctl enable iptables.service
-
-# Install System Network Usage Tools
-vnstat --create -i $iname
-systemctl restart vnstat
-systemctl enable vnstat
 
 # Update System
 ###########################################################################
@@ -134,10 +132,7 @@ yum update -y
 ###########################################################################
 
 yum update -y
-yum install nginx -y
-
-
-yum install -y php php-mysqlnd php-fpm php-opcache \
+yum install -y nginx php php-mysqlnd php-fpm php-opcache \
    php-pecl-apcu php-cli php-pear \
    php-pdo php-pgsql php-pecl-mongodb \
    php-pecl-redis php-pecl-memcache \
@@ -149,6 +144,11 @@ yum install -y php php-mysqlnd php-fpm php-opcache \
 # Remove if there is any file
 rm -rf /usr/share/nginx/html/*
 
+wget -O /etc/nginx/nginx.conf https://github.com/abdsmd/Hi-Performance-LEMP-on-Centos-7/raw/main/nginx.conf
+dos2unix /etc/nginx/nginx.conf
+
+
+
 # Set System Open File Limit of NGINX 
 ###########################################################################
 
@@ -158,11 +158,11 @@ echo "nginx   hard    nofile  65536" >> /etc/security/limits.d/nginx.conf
 
 
 # If you need PhantomJS
-yum install -y glibc fontconfig freetype freetype-devel fontconfig-devel wget bzip2
-wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
-tar xvjf phantomjs-2.1.1-linux-x86_64.tar.bz2 -C /usr/local/share/
-ln -sf /usr/local/share/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin
-phantomjs --version
+#yum install -y glibc fontconfig freetype freetype-devel fontconfig-devel wget bzip2
+#wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
+#tar xvjf phantomjs-2.1.1-linux-x86_64.tar.bz2 -C /usr/local/share/
+#ln -sf /usr/local/share/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin
+#phantomjs --version
 
 
 # Install MySQL 5.7
@@ -172,7 +172,7 @@ yum localinstall https://dev.mysql.com/get/mysql57-community-release-el7-9.noarc
 yum install mysql-community-server
 systemctl restart mysqld
 systemctl enable mysqld
-grep 'A temporary password' /var/log/mysqld.log |tail -1
+grep 'A temporary password' /var/log/mysqld.log | tail -1
 mysql_secure_installation
 
 
@@ -185,7 +185,7 @@ wget -O /etc/php-fpm.d/www.conf https://raw.githubusercontent.com/abdsmd/Hi-Perf
 
 # Install Lets Encrypt $HNAME is the hostname or you can set the hostname directly
 yum install -y certbot python2-certbot-nginx
-certbot certonly --nginx --agree-tos --preferred-challenges http --register-unsafely-without-email -d $HNAME
+# certbot certonly --nginx --agree-tos --preferred-challenges http --register-unsafely-without-email -d $HNAME
 
 # Make lets encrypt renew certificate automatically
 cat <<EOF>/etc/cron.daily/letsencrypt-renew
@@ -216,6 +216,7 @@ redis-cli ping
 yum install -y supervisor
 wget -O /etc/supervisord.conf https://github.com/abdsmd/Hi-Performance-LEMP-on-Centos-7/raw/main/supervisord.conf
 systemctl restart supervisord
+
 # Check the Superviosr Tasks
 supervisorctl status all
 supervisorctl start all
@@ -289,11 +290,12 @@ ulimit -x unlimited
 ulimit -s 32388608
 ulimit -l unlimited
 
-wget https://github.com/abdsmd/Hi-Performance-LEMP-on-Centos-7/raw/main/rc.local -O ->> /etc/rc.local
-dos2unix /etc/rc.local
 wget -O /watchdog.sh https://github.com/abdsmd/Hi-Performance-LEMP-on-Centos-7/raw/main/watchdog.sh
 dos2unix /watchdog.sh
 chmod 777 /watchdog.sh
+wget https://github.com/abdsmd/Hi-Performance-LEMP-on-Centos-7/raw/main/rc.local -O ->> /etc/rc.local
+dos2unix /etc/rc.local
+
 
 
 
