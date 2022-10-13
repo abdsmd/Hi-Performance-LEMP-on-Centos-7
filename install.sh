@@ -146,7 +146,10 @@ rm -rf /usr/share/nginx/html/*
 
 wget -O /etc/nginx/nginx.conf https://github.com/abdsmd/Hi-Performance-LEMP-on-Centos-7/raw/main/nginx.conf
 dos2unix /etc/nginx/nginx.conf
-
+pkill -9 nginx
+pkill -9 php-fpm
+systemctl restart nginx
+systemctl restart php-fpm
 
 
 # Set System Open File Limit of NGINX 
