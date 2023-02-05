@@ -25,6 +25,14 @@ yum install -y http://rpms.remirepo.net/enterprise/remi-release-7.rpm
 yum install -y yum-utils epel-release
 yum -y install centos-release-scl.noarch
 yum install -y yum-utils
+
+# For php 8.1
+yum-config-manager --disable 'remi-php*'
+yum-config-manager --enable remi-php81
+yum repolist
+yum -y install php php-{cli,fpm,mysqlnd,zip,devel,gd,mbstring,curl,xml,pear,bcmath,json,opcache,redis,memcache}
+
+for php 74
 yum-config-manager --enable remi-php74
 
 # Some Variable Set Here
