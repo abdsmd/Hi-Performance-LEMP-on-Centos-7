@@ -340,16 +340,17 @@ chown nginx:nginx /usr/share/nginx/html/ -R
 
 #-------------------------------------------------------------------------------------
 ## For Laravel Project
-#chmod 777 -R /usr/share/nginx/html/storage 
-#chmod 777 -R /usr/share/nginx/html/bootstrap
-#find /path/to/your/laravel-directory -type f -exec chmod 644 {} \;
-#find /path/to/your/laravel-directory -type d -exec chmod 755 {} \;
-#chown -R nginx:nginx /path/to/your/laravel-directory
-#find /path/to/your/laravel-directory -type f -exec chmod 664 {} \;
-#find /path/to/your/laravel-directory -type d -exec chmod 775 {} \;
-#cd /path/to/your/laravel-directory
-#chgrp -R nginx storage bootstrap/cache
-#chmod -R ug+rwx storage bootstrap/cache
+chmod 777 -R /usr/share/nginx/html/storage 
+chmod 777 -R /usr/share/nginx/html/bootstrap
+find /path/to/your/laravel-directory -type f -exec chmod 644 {} \;
+find /path/to/your/laravel-directory -type d -exec chmod 755 {} \;
+chown -R nginx:nginx /path/to/your/laravel-directory
+find /path/to/your/laravel-directory -type f -exec chmod 664 {} \;
+find /path/to/your/laravel-directory -type d -exec chmod 775 {} \;
+cd /path/to/your/laravel-directory
+chgrp -R nginx storage bootstrap/cache
+chmod -R ug+rwx storage bootstrap/cache
+chmod 777 -R /usr/share/nginx/html/storage/
 #-------------------------------------------------------------------------------------
 
 # To install virtual host or multiple domain check my other tutorial,
