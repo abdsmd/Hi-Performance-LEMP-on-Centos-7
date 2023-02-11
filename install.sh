@@ -350,6 +350,8 @@ find /path/to/your/laravel-directory -type d -exec chmod 775 {} \;
 cd /path/to/your/laravel-directory
 chgrp -R nginx storage bootstrap/cache
 chmod -R ug+rwx storage bootstrap/cache
+chmod 777 -R bootstrap/cache/
+chmod 777 -R resources/lang/
 chmod 777 -R /usr/share/nginx/html/storage/
 #-------------------------------------------------------------------------------------
 
