@@ -186,6 +186,12 @@ systemctl enable mysqld
 grep 'A temporary password' /var/log/mysqld.log | tail -1
 mysql_secure_installation
 
+# Create MySQL user and grans all privileges
+CREATE DATABASE database;
+CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON database.* TO 'user'@'localhost';
+FLUSH PRIVILEGES;
+
 
 # Configure PHP-FPM
 ###############################################################
