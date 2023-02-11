@@ -353,6 +353,9 @@ chmod -R ug+rwx storage bootstrap/cache
 chmod 777 -R bootstrap/cache/
 chmod 777 -R resources/lang/
 chmod 777 -R /usr/share/nginx/html/storage/
+
+ln -s /usr/share/nginx/html/storage /usr/share/nginx/html/public/storage
+
 #-------------------------------------------------------------------------------------
 
 # To install virtual host or multiple domain check my other tutorial,
