@@ -367,4 +367,26 @@ yum install nodejs npm -y
 node -v
 
 
+# Install MongoDB
+cat <<EOF>/etc/yum.repos.d/mongodb-org.repo
+[mongodb-org-6.0]
+name=MongoDB Repository
+baseurl=https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/6.0/x86_64/
+gpgcheck=1
+enabled=1
+gpgkey=https://www.mongodb.org/static/pgp/server-6.0.asc
+
+EOF
+yum install -y mongodb-org
+systemctl start mongod
+189  tail /var/log/mongodb/mongod.log
+echo "mongod     soft    nproc     32000" >> /etc/security/limits.d/20-nproc.conf
+systemctl restart mongod
+systemctl enable mongod
+mongosh
+> db.help();
+> exit
+
+
+
 
