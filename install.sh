@@ -383,7 +383,15 @@ systemctl start mongod
 echo "mongod     soft    nproc     32000" >> /etc/security/limits.d/20-nproc.conf
 systemctl restart mongod
 systemctl enable mongod
+
+chown -R mongod:mongod /var/lib/mongo/
+chown -R mongod:mongod /tmp/mongodb-27017.sock
+systemctl restart mongod
+
+
 mongosh
+
+# Create Database
 > db.help();
 > exit
 
