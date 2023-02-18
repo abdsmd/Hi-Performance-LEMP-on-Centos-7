@@ -361,3 +361,10 @@ ln -s /usr/share/nginx/html/storage /usr/share/nginx/html/public/storage
 # To install virtual host or multiple domain check my other tutorial,
 # How to install wordpress check my other tutorial
 
+# Install NODE
+yum install -y gcc-c++ make
+yum install nodejs -y
+node -v
+
+
+
