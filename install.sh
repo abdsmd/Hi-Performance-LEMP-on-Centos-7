@@ -363,7 +363,7 @@ ln -s /usr/share/nginx/html/storage /usr/share/nginx/html/public/storage
 
 # Install NODE
 yum install -y gcc-c++ make
-yum install nodejs -y
+yum install nodejs npm -y
 node -v
 
 
